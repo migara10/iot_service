@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        ._on{
+            color: green;
+        }
+        ._off{
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <input type="button" value="Open Curtain" id="myButton1"></input> -->
+    <div id="show_counter" class="show_counter"></div>
+    <div id="led" class="led">LED</div>
+    <button onclick="LightOn()">ON</button>
+    <button onclick="LightOff()">OFF</button>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+        var socket = io();
+
+
+        function LightOn() {
+            socket.emit('lightOn', function (error, counter) {
+            });
+        }
+        function LightOff() {
+            socket.emit('lightOff', function (error, counter) {
+            });
+        }
+
+        socket.on('counter', function (socket) {
+            var elem = document.getElementById("show_counter");
+            elem.textContent = socket;
+            const ledStyle = document.getElementById("led").classList;
+            if(socket) {
+                ledStyle.add("_on");
+                ledStyle.remove("_off");
+            } else {
+                ledStyle.add("_off");
+                ledStyle.remove("_on");
+            }
+        });
+    </script>
+</body>
+
+</html>
